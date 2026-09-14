@@ -1,0 +1,3 @@
+# NovaSpark is intentionally stdlib-first.
+# No paid AI SDK, cloud database, hosting package, or external dependency is required.
+# Optional local model adapters can be added later without changing the core interface.
