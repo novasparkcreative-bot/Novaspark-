@@ -28,13 +28,14 @@ CREATE TABLE IF NOT EXISTS tasks (
  priority TEXT NOT NULL DEFAULT 'normal',
  depends_on INTEGER,
  output TEXT DEFAULT '',
+ client_id INTEGER,
  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS clients (
  id INTEGER PRIMARY KEY AUTOINCREMENT,
  business_name TEXT NOT NULL,
  contact TEXT,
- payment_status TEXT NOT NULL DEFAULT 'pending',
+payment_status TEXT NOT NULL DEFAULT 'pending',
  onboarding_status TEXT NOT NULL DEFAULT 'pending',
  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -55,6 +56,9 @@ def connect():
 def init_db():
     with connect() as con:
         con.executescript(SCHEMA)
+        columns = {row[1] for row in con.execute("PRAGMA table_info(tasks)")}
+        if "client_id" not in columns:
+            con.execute("ALTER TABLE tasks ADD COLUMN client_id INTEGER")
 
 if __name__ == "__main__":
     init_db()
